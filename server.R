@@ -14,8 +14,8 @@ shinyServer(function(input, output) {
   
   #log2cpm<-read.csv('Data/Expression.csv',row.names=1,stringsAsFactors = F, as.is=T, check.names=F)
   
-  #featuredata<-read.csv('Data/HG19_v74_FeatureData.csv',row.names=1,stringsAsFactors = F, as.is=T)
-  #tsne.data<-read.csv('Data/Filtered_log2cpm_TNSE_SupervisedKmeans.csv',row.names=1,stringsAsFactors = F,as.is=T)
+  #featuredata<-read.csv('Databases/HG19_v74_FeatureData.csv',row.names=1,stringsAsFactors = F, as.is=T)
+  #tsne.data<-read.csv('Data/Filtered_log2cpm_TNSE_dbscan.csv',row.names=1,stringsAsFactors = F,as.is=T)
   
  #load('data.Rds')
   
@@ -25,6 +25,9 @@ shinyServer(function(input, output) {
   saved_plots_and_tables <- reactiveValues(log2cpm = NULL,
                                            tsne.data=NULL,
                                            featuredata=NULL)
+  n_fun <- function(x){
+    return(data.frame(y = 5, label = paste0("cells = ",length(x))))
+  }
   
   data<-reactive({
 
@@ -170,6 +173,7 @@ shinyServer(function(input, output) {
       p1<-p1<-ggplot(tsne.data,aes(factor(dbCluster),values,fill=factor(dbCluster)))+
         geom_violin(scale = "width")+
         stat_summary(fun.y=median, geom="point", size=5,color='black')+
+        stat_summary(fun.data = n_fun, geom = "text")+
         theme_bw()+
         theme(axis.text.x=element_text(angle=90, size=12, vjust=0.5), 
               axis.text.y=element_text(size=12), strip.text.x = element_text(size=16), 

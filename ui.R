@@ -119,7 +119,9 @@ shinyUI(navbarPage(theme = shinytheme("flatly"),
                        downloadButton("downloadExpression", "Download Expression"))
                  )
                ),
-               
+               br(),
+               br(),
+               br(),
                fluidRow(
                  column(5,offset=1,
                         plotlyOutput('tsne_plt')
