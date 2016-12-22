@@ -19,14 +19,14 @@ shinyServer(function(input, output) {
   
  #load('data.Rds')
   
-  options(shiny.maxRequestSize = 50*1024^2)
+  options(shiny.maxRequestSize = 100*1024^2)
   
   
   saved_plots_and_tables <- reactiveValues(log2cpm = NULL,
                                            tsne.data=NULL,
                                            featuredata=NULL)
   n_fun <- function(x){
-    return(data.frame(y = 5, label = paste0("cells = ",length(x))))
+    return(data.frame(y = -.5, label = paste0(length(x),"\ncells")))
   }
   
   data<-reactive({
@@ -46,7 +46,7 @@ shinyServer(function(input, output) {
       featuredata$Associated.Gene.Name<-toupper(featuredata$Associated.Gene.Name)
       saved_plots_and_tables$featuredata<-featuredata
       
-      #cat(stderr(),colnames(log2cpm)[1:5])
+      #cat(stderr(),grep('^T_',colnames(log2cpm)))
   })
   
   
@@ -100,6 +100,7 @@ shinyServer(function(input, output) {
         saved_plots_and_tables$featuredata[which(saved_plots_and_tables$featuredata$Associated.Gene.Name==toupper(input$gene_id)),])[1]
       
       expression<-saved_plots_and_tables$log2cpm[geneid,]
+      cat(file=stderr(),rownames(expression))
       
       validate(
         need(is.na(sum(expression))!=TRUE,'Gene symbol incorrect or gene not expressed')
@@ -197,11 +198,16 @@ shinyServer(function(input, output) {
       expression<-saved_plots_and_tables$log2cpm[geneid,]
       #cat(stderr(),colnames(expression)[1:5])
       tsne.data<-cbind(saved_plots_and_tables$tsne.data,t(expression))
+      #cat(file=stderr(),grep('^T_',rownames(tsne.data)))
       
       names(tsne.data)[names(tsne.data) == geneid] <- 'values'
       
+      cat(file=stderr(),grep('^T_',rownames(tsne.data)))
+      
       subsetData<-subset(tsne.data,dbCluster==input$cluster)
+      #cat(file=stderr(),rownames(subsetData)[1:5])
       cells<-rownames(brushedPoints(subsetData,input$b1))
+      cat(file=stderr(),cells[1:5])
       subsetExpression<-saved_plots_and_tables$log2cpm[,cells]
       #cat(stderr(),colnames(subsetExpression)[1:5])
       
