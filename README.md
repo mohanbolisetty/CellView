@@ -2,13 +2,15 @@
 
 ### ShinyApp to visualize and explore single cell datasets ###
 
-> Hosted at: https://mbolisetty.shinyapps.io/CellView/
+> > Hosted at: https://mbolisetty.shinyapps.io/CellView/
 
-The .Rds file is made up three data frames, with the following names and column names.
+  An .Rds file made up of three data frames is necessary for upload, with the following object names and column names.
 
-log2cpm – This is your genes vs cells expression matrix. The gene names need to be in ENSG (or ENSM) ids. 
-tsne.data – This is your clustering result. This contains 4 columns, {V1,V2,V3} for the 3 dimensions and dbCluster containing numerical cluster assignments. The row names of this data frame correspond to the column names of your expression matrix
-featuredata- One of the attached files. Use human or mouse depending on the data.
+  log2cpm – This is your genes vs cells expression matrix. The gene names need to be in ENSG (or ENSM) ids.
+
+  tsne.data – This is your clustering result. This contains 4 columns, {V1,V2,V3} for the 3 dimensions and dbCluster containing numerical cluster assignments. The row names of this data frame correspond to the column names of your expression matrix
+
+  featuredata- One of the attached files. Use human or mouse depending on the data.
 
 #### Code to generate an .Rds file for upload to CellView: ####
 
