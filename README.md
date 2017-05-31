@@ -10,7 +10,7 @@
 
   tsne.data – This is your clustering result. This contains 4 columns, {V1,V2,V3} for the 3 dimensions and dbCluster containing numerical cluster assignments. The row names of this data frame correspond to the column names of your expression matrix
 
-  featuredata- One of the attached files. Use human or mouse depending on the data.
+  featuredata- One of the attached files to convert ENSG ids to human useful gene names. Use human or mouse depending on the data. Or, make your own. The Chromosome.Name column should be integer and at the minimum should have this column along with Associated.Gene.Name column. Beware of duplicate gene names with unique ENSG ids.
 
 #### Code to generate an .Rds file for upload to CellView: ####
 
