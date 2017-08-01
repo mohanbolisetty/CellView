@@ -62,6 +62,13 @@ shinyUI(
           )
         )
       )),
+      
+      fluidRow(
+      column(5,offset='4',
+             htmlOutput('summaryStats'))
+      ),
+      br(),
+      
       fluidRow(column(5, offset = "3",
                       plotlyOutput('tsne_main')))
     ),
@@ -146,175 +153,292 @@ shinyUI(
         ),
         fluidRow(column(10, offset = 1,
                         plotOutput('gene_vio_plot')))
+      ),
+      
+      tabPanel('Panel plot',
+               tags$ul(
+                 tags$li(
+                   strong('Panel plot'),
+                   ':Select a cluster. Enter',
+                   strong('ONE'),
+                   'or',
+                   strong('MULTIPLE'),
+                   'gene ids to visualize expression in all clusters'
+                 )
+                 
+               ),
+               fluidRow(
+                 column(2,
+                        uiOutput("clusters4")),
+                 column(
+                   2,
+                   selectInput(
+                     'dimension_x4',
+                     label = 'X',
+                     choice = c('V1', 'V2', 'V3'),
+                     selected = 'V1'
+                   )
+                 ),
+                 column(
+                   2,
+                   selectInput(
+                     'dimension_y4',
+                     label = 'Y',
+                     choice = c('V1', 'V2', 'V3'),
+                     selected = 'V2'
+                   )
+                 ),
+                 column(
+                   2,
+                   tags$head(tags$script(HTML(jscode))),
+                   tagAppendAttributes(
+                     textInput('panelplotids', 'Comma seperated gene names', value = 'Il6'),
+                     `data-proxy-click` = "goButton8"
+                   ),
+                   actionButton('goButton8', 'Run')
+                 )
+               ),
+               fluidRow(column(
+                 10, offset = 1,
+                 plotOutput('panelPlot')
+               ))
+               
       )
     ),
     
-    navbarMenu('Co-expression',
+    navbarMenu(
+      'Co-expression',
+      
+      tabPanel('AllClusters',
                
-               tabPanel('AllClusters',
-                        
-                        fluidRow(
-                          column(
-                            2,
-                            tags$head(tags$script(HTML(jscode))),
-                            tagAppendAttributes(
-                              textInput('heatmap_geneids', 'Comma seperated gene names', value = 'Il6,Cd3d,Genes,Umi'),
-                              `data-proxy-click` = "goButton1"
-                            ),
-                            actionButton('goButton1', 'Run')
-                          )
-                        ),
-                        
-                        fluidRow(
-                          column(10,offset=1,
-                                 plotOutput('heatmap')
-                          )
-                        )
+               fluidRow(
+                 column(
+                   2,
+                   tags$head(tags$script(HTML(jscode))),
+                   tagAppendAttributes(
+                     textInput('heatmap_geneids', 'Comma seperated gene names', value = 'Il6,Cd3d,Genes,Umi'),
+                     `data-proxy-click` = "goButton1"
+                   ),
+                   actionButton('goButton1', 'Run')
+                 )
                ),
                
-               tabPanel('Selected cells',
-                        tags$ul(
-                          tags$li(
-                            strong('Subclustering'),
-                            ':Select a group of cells in plot1 based based on a single gene expression. Enter multiple gene ids to assess the co-expression of genes in these cells'
-                          )
-                          
-                        ),
-                        fluidRow(
-                          column(
-                            2,
-                            tags$head(tags$script(HTML(jscode))),
-                            tagAppendAttributes(
-                              textInput('gene_id_sch', 'Enter gene', value = 'Il6'),
-                              `data-proxy-click` = "goButton5"
-                            ),
-                            actionButton('goButton5', 'Run')
-                          ),
-                          column(2,
-                                 uiOutput("clusters2")),
-                          column(
-                            2,
-                            selectInput(
-                              'dimension_x2',
-                              label = 'X',
-                              choice = c('V1', 'V2', 'V3'),
-                              selected = 'V1'
-                            )
-                          ),
-                          column(
-                            2,
-                            selectInput(
-                              'dimension_y2',
-                              label = 'Y',
-                              choice = c('V1', 'V2', 'V3'),
-                              selected = 'V2'
-                            )
-                          )
-                        ),
-                        fluidRow(
-                          column(5, offset = 1,
-                                 plotOutput('clusterPlot2',brush = brushOpts(id =
-                                                                               'scb1')
-                                 )
-                          )
-                        ),
-                        fluidRow(
-                          column(
-                            2,
-                            tags$head(tags$script(HTML(jscode))),
-                            tagAppendAttributes(
-                              textInput('heatmap_geneids2', 'Comma seperated gene names', value = 'Il6,Cd3d'),
-                              `data-proxy-click` = "goButton6"
-                            ),
-                            actionButton('goButton6', 'Run')
-                          )
-                        ),
-                        fluidRow(
-                          column(10, offset = 1,
-                                 plotOutput('selectedHeatmap' )
-                          )
-                        )
-               )
-  ),
-  navbarMenu(
-    'Subcluster-analysis',
-    tabPanel(
-      'DGE Analysis',
-      tags$ul(
-        tags$li(
-          strong('Subclustering'),
-          ':Select a group of cells in plot1 and a different group of cells in plot2 for identifying differential features between these subclusters'
-        )
-        
-      ),
+               fluidRow(column(
+                 10, offset = 1,
+                 plotOutput('heatmap')
+               ))),
       
-      fluidRow(
-        column(2,
-               uiOutput("clusters1")),
-        column(
-          2,
-          selectInput(
-            'dimension_x1',
-            label = 'X',
-            choice = c('V1', 'V2', 'V3'),
-            selected = 'V1'
+      tabPanel(
+        'Selected cells',
+        tags$ul(
+          tags$li(
+            strong('Subclustering'),
+            ':Select a group of cells in plot1 based based on a single gene expression. Enter multiple gene ids to assess the co-expression of genes in these cells'
+          )
+          
+        ),
+        fluidRow(
+          column(
+            2,
+            tags$head(tags$script(HTML(jscode))),
+            tagAppendAttributes(
+              textInput('gene_id_sch', 'Enter gene', value = 'Il6'),
+              `data-proxy-click` = "goButton5"
+            ),
+            actionButton('goButton5', 'Run')
+          ),
+          column(2,
+                 uiOutput("clusters2")),
+          column(
+            2,
+            selectInput(
+              'dimension_x2',
+              label = 'X',
+              choice = c('V1', 'V2', 'V3'),
+              selected = 'V1'
+            )
+          ),
+          column(
+            2,
+            selectInput(
+              'dimension_y2',
+              label = 'Y',
+              choice = c('V1', 'V2', 'V3'),
+              selected = 'V2'
+            )
           )
         ),
-        column(
+        fluidRow(column(
+          5, offset = 1,
+          plotOutput('clusterPlot2', brush = brushOpts(id =
+                                                         'scb1'))
+        )),
+        fluidRow(column(
           2,
-          selectInput(
-            'dimension_y1',
-            label = 'Y',
-            choice = c('V1', 'V2', 'V3'),
-            selected = 'V2'
+          tags$head(tags$script(HTML(jscode))),
+          tagAppendAttributes(
+            textInput('heatmap_geneids2', 'Comma seperated gene names', value = 'Il6,Cd3d'),
+            `data-proxy-click` = "goButton6"
+          ),
+          actionButton('goButton6', 'Run')
+        )),
+        fluidRow(column(
+          10, offset = 1,
+          plotOutput('selectedHeatmap')
+        ))
+      ),
+      
+      tabPanel(
+        'Binarize',
+        tags$ul(
+          tags$li(
+            strong('Binary Expression'),
+            ':Select a cluster. Enter',
+            strong('ONE'),
+            'or',
+            strong('MULTIPLE'),
+            'gene ids to assess the co-expression of genes in these cells. Highlighted cells have all genes expressed as determined by a GMM'
+          )
+          
+        ),
+        fluidRow(
+          column(2,
+                 uiOutput("clusters3")),
+          column(
+            2,
+            selectInput(
+              'dimension_x3',
+              label = 'X',
+              choice = c('V1', 'V2', 'V3'),
+              selected = 'V1'
+            )
+          ),
+          column(
+            2,
+            selectInput(
+              'dimension_y3',
+              label = 'Y',
+              choice = c('V1', 'V2', 'V3'),
+              selected = 'V2'
+            )
+          ),
+          column(
+            2,
+            tags$head(tags$script(HTML(jscode))),
+            tagAppendAttributes(
+              textInput('mclustids', 'Comma seperated gene names', value = 'Il6'),
+              `data-proxy-click` = "goButton7"
+            ),
+            actionButton('goButton7', 'Run')
           )
         ),
-        column(2,
-               tags$head(tags$script(HTML(jscode))),
-               actionButton('goButton2', 'Plot'))
-      ),
-      
-      fluidRow(column(
-        4,
-        plotOutput('dge_plot1', brush = brushOpts(id =
-                                                    "db1"))
-      ),
-      column(
-        4,
-        plotOutput('dge_plot2', brush = brushOpts(id =
-                                                    'db2'))
-      ),
-      column(2,
-             tags$head(tags$script(HTML(jscode))),
-             actionButton('goButton3', 'Differential'))
-      ),
-      
-      fluidRow(
-        h4('Top Differentially Expressed Genes', offset = 1),
-        DT::dataTableOutput('dge')
-      ),
-      fluidRow(
-        div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-            downloadButton("download_dge_table", "Download DGE Table"))
-        
-      )
-    )
-  ),
-  
-  navbarMenu(
-    'Gene set analysis',
-    tabPanel(
-      'KEGG',
-      tags$ul(
-        tags$li(
-          strong('KEGG Pathway'),
-          ':Select a cluster to investigate significant upregulated KEGG pathways using GAGE'
+        fluidRow(column(
+          10, offset = 1,
+          plotOutput('plotCoExpression')
+        )),
+        fluidRow(
+          div(
+            align = "center",
+            style = "margin-center:50px; margin-top:25px",
+            downloadButton(
+              "downloadExpressionOnOff",
+              "Download Expression +ve Cells in cluster"
+            )
+            
+          )
+        ),
+        br(),
+        br(),
+        br(),
+        fluidRow(
+          h4('Positive Cells in all clusters', align = "center"),
+          column(6, offset = 3,
+                 DT::dataTableOutput('onOffTable'))
         )
       )
     ),
-    tabPanel(
-      'GO'
+    navbarMenu(
+      'Subcluster-analysis',
+      tabPanel(
+        'DGE Analysis',
+        tags$ul(
+          tags$li(
+            strong('Subclustering'),
+            ':Select a group of cells in plot1 and a different group of cells in plot2 for identifying differential features between these subclusters'
+          )
+          
+        ),
+        
+        fluidRow(
+          column(2,
+                 uiOutput("clusters1")),
+          column(
+            2,
+            selectInput(
+              'dimension_x1',
+              label = 'X',
+              choice = c('V1', 'V2', 'V3'),
+              selected = 'V1'
+            )
+          ),
+          column(
+            2,
+            selectInput(
+              'dimension_y1',
+              label = 'Y',
+              choice = c('V1', 'V2', 'V3'),
+              selected = 'V2'
+            )
+          ),
+          column(2,
+                 tags$head(tags$script(HTML(
+                   jscode
+                 ))),
+                 actionButton('goButton2', 'Plot'))
+        ),
+        
+        fluidRow(
+          column(4,
+                 plotOutput('dge_plot1', brush = brushOpts(id =
+                                                             "db1"))),
+          column(4,
+                 plotOutput('dge_plot2', brush = brushOpts(id =
+                                                             'db2'))),
+          column(
+            2,
+            tags$head(tags$script(HTML(jscode))),
+            actionButton('goButton3', 'Differential')
+          )
+        ),
+        fluidRow(
+          h4('Top Differentially Expressed Genes', offset = 1),
+          DT::dataTableOutput('dge')
+        ),
+        fluidRow(
+          div(
+            align = "right",
+            style = "margin-right:15px; margin-bottom:10px",
+            downloadButton("download_dge_table", "Download DGE Table")
+          )
+          
+        )
+      )
     )
+    
+    #  navbarMenu(
+    #    'Gene set analysis',
+    #    tabPanel(
+    #      'KEGG',
+    #      tags$ul(
+    #        tags$li(
+    #          strong('KEGG Pathway'),
+    #          ':Select a cluster to investigate significant upregulated KEGG pathways using GAGE'
+    #        )
+    #      )
+    #    ),
+    #    tabPanel(
+    #      'GO'
+    #    )
+    #  )
   )
-)
 )
