@@ -12,8 +12,8 @@ A preprint describing this software is available on
 ### Introduction
 
 CellView reads expression, dimesionality reduction/clustering, and feature 
-annotation data objects from an `.Rds`, and provides functionality to quickly 
-explore and interactively analyze single cell transcriptomic data.
+annotation data objects from an `.Rds` file, and provides functionality to 
+quickly explore and interactively analyze single cell transcriptomic data.
 
 - View 3D representation of your dataset.
 - Analyze (co-)expression patterns within and among specific clusters.
@@ -54,7 +54,7 @@ are *required*.
 ```R
 options(stringsAsFactors = FALSE, row.names = 1, as.is = T)
 log2cpm <- read.csv('Data/Expression.csv', check.names = F)
-featuredata <- read.csv('Databases/HG19_v74_FeatureData.csv',sep = ',')
+featuredata <- read.csv('Databases/HG19_v74_FeatureData.csv', sep = ',')
 tsne.data <- read.csv('Data/TNSE_dbscan.csv')
 
 save(log2cpm, featuredata, tsne.data, file = 'Filename.Rds')
